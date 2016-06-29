@@ -7,7 +7,6 @@ node('docker') {
             docker.image('ruby:2.3').inside {
                 sh 'ls'
                 sh 'ruby --version'
-                sh 'mysql --version'
                 sh 'bundle'
             }
         }
