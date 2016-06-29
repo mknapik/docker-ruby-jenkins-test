@@ -1,19 +1,14 @@
 node('docker') {
     checkout(scm)
 
-    withEnv(["MYSQL_PORT=${3307 + (env.EXECUTOR_NUMBER ? env.EXECUTOR_NUMBER : 0).toInteger()}"]) {
-        docker.image('mysql:5.6').withRun("-e MYSQL_ROOT_PASSWORD=root -p ${env.MYSQL_PORT}:3306") { mysql ->
+    withEnv(["MYSQL_ROOT_PASSWORD=akjhadsfhreltouocivuxuasdof"]) {
+        docker.image('mysql:5.6').withRun("-e MYSQL_ROOT_PASSWORD=${env.MYSQL_ROOT_PASSWORD}") { mysqlContainer ->
             // sh "mysql -h 127.0.0.1 -P ${env.MYSQL_PORT} -u root -proot --execute='show databases'"
-            print mysql
-            docker.image('ruby:2.3').inside('-u root') { ruby ->
-                print ruby
-                
-                sh 'ls'
+            docker.image('ruby:2.3').inside("-u root --link=${mysqlContainer.id}:mysql") {
                 sh 'ruby --version'
-                sh 'apt-get update && apt-get install --yes --force-yes mysql-client'
-                
-                // sh "mysql -u root -proot --execute='show databases'"
-                sh 'bundle'
+                sh 'apt-get update'
+                sh 'apt-get install --yes --force-yes libmysqlclient-dev'
+                sh "mysql -h mysql -u root -p${env.MYSQL_ROOT_PASSWORD} --execute='show databases'"
             }
         }
     }
