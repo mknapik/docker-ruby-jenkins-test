@@ -8,7 +8,7 @@ node('docker') {
                 // sh 'apt-get update'
                 // sh 'apt-get install --yes --force-yes libmysqlclient-dev'
                 sh "bundle install --quiet --frozen"
-                sh 'bundle exec rake'
+                sh "bundle exec rake default[mysql,${env.MYSQL_ROOT_PASSWORD}]"
             }
         }
     }
