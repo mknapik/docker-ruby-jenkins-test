@@ -2,7 +2,7 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-# gem "rails"
 gem 'dry-types'
 gem 'sinatra'
 gem 'mysql2'
+gem 'rake'
