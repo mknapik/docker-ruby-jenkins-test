@@ -7,7 +7,7 @@ node('docker') {
                 sh 'ruby --version'
                 // sh 'apt-get update'
                 // sh 'apt-get install --yes --force-yes libmysqlclient-dev'
-
+                sh "bundle install --quiet --frozen"
                 sh 'bundle exec rake'
             }
         }
