@@ -1,6 +1,13 @@
 node('docker') {
     checkout(scm)
 
+    def cachePath = "${env.HOME}/shared/bundle/${env.EXECUTOR_NUMBER}"
+    def image = docker.build()
+    image.inside("-v ${cachePath}:/usr/local/bundle/cache ${opts}") {
+        sh 'ruby --version'
+        sh 'whoami'
+    }
+
     withMysql { mysqlLink ->
         withRuby('2.3', "--link=${mysqlLink}") {
             sh 'ruby --version'
