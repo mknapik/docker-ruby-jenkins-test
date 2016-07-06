@@ -1,0 +1,13 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.6
+    environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=1
+  web:
+    build: .
+    command: /sbin/init
+    volumes:
+    - .:/code
+    depends_on:
+    - db
