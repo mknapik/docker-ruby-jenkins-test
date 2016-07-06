@@ -1,5 +1,3 @@
-import org.jenkinsci.plugins.docker.workflow.Docker.
-
 node('docker') {
     checkout(scm)
     def projectName = "${env.EXECUTOR_NUMBER}"
