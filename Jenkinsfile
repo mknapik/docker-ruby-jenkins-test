@@ -8,13 +8,13 @@ node('docker') {
         sh """
             docker-compose -p $projectName run web bash -c "
                 ruby --version
-                find /usr/local/bundle
+                pwd
+                ls
                 bundle install --quiet --frozen
                 bundle exec rake default[db,'']
             "
         """
     } finally {
-        sh "docker-compose -p $projectName down"
+        sh "docker-compose -p $projectName down --rmi local"
     }
-
 }
