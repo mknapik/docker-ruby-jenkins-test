@@ -11,3 +11,9 @@ services:
     - .:/code
     depends_on:
     - db
+    volumes:
+    - /tmp/0/usr/local/bundle/cache:/usr/local/bundle/cache
+
+volumes:
+  data:
+    external: true

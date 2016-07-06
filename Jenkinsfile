@@ -6,15 +6,15 @@ node('docker') {
         sh "docker-compose -p $projectName up -d"
 
         sh """
-            docker-compose -p $projectName exec bash -c "
+            docker-compose -p $projectName run web bash -c "
                 ruby --version
                 find /usr/local/bundle
                 bundle install --quiet --frozen
-                bundle exec rake default[mysql,'']
+                bundle exec rake default[db,'']
             "
         """
     } finally {
-        sh 'docker-compose down'
+        sh "docker-compose -p $projectName down"
     }
 
 }
