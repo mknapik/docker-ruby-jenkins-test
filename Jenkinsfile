@@ -2,11 +2,23 @@ node('docker') {
     checkout(scm)
 
     withDockerCompose { compose ->
-        compose.exec('web', """
+        compose.createJenkinsUser('web')
+        compose.exec('web', 'jenkins', """
+            whoami
             ruby --version
-                bundle install --quiet --frozen
-                bundle exec rake default[db,'']
+            bundle install --quiet --frozen
+            bundle exec rake default[db,'']
         """)
+    }
+}
+
+class UserGroup implements Serializable {
+    final String user
+    final String group
+
+    def UserGroup(String user, String group) {
+        this.user = user
+        this.group = group
     }
 }
 
@@ -19,9 +31,34 @@ class DockerCompose implements Serializable {
         this.script = script
     }
 
+    def createJenkinsUser(String service) {
+        script.sh 'id -u > .jenkins_uid'
+        script.sh 'id -g > .jenkins_gid'
+        
+        String uid = script.readFile('.jenkins_uid').trim()
+        String gid = script.readFile('.jenkins_gid').trim()
+        script.sh "getent group $gid | cut -d: -f1 > .jenkins_groupname"
+        String group = script.readFile('.jenkins_groupname').trim()
+
+        script.sh 'rm .jenkins_uid'
+        script.sh 'rm .jenkins_gid'
+        script.sh 'rm .jenkins_groupname'
+
+        exec(service, "addgroup --gid $gid $group")
+        exec(service, "adduser  --no-create-home --disabled-password --gecos '' `whoami` --uid $uid --gid $gid")
+    }
+
     def exec(String service, String cmd) {
         script.sh """
-            docker-compose -p $projectName exec $service bash -c "
+            docker-compose -p $projectName exec -T $service bash -c "
+                $cmd
+            "
+        """
+    }
+
+    def exec(String service, String user, String cmd) {
+        script.sh """
+            docker-compose -p $projectName exec --user $user -T $service bash -c "
                 $cmd
             "
         """
