@@ -2,7 +2,7 @@ node('docker') {
     checkout(scm)
 
     withDockerCompose { compose ->
-        compose.run('web', """
+        compose.exec('web', """
             ruby --version
                 bundle install --quiet --frozen
                 bundle exec rake default[db,'']
@@ -19,9 +19,9 @@ class DockerCompose implements Serializable {
         this.script = script
     }
 
-    def run(String service, String cmd) {
+    def exec(String service, String cmd) {
         script.sh """
-            docker-compose -p $projectName run $service bash -c "
+            docker-compose -p $projectName exec $service bash -c "
                 $cmd
             "
         """
