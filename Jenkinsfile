@@ -6,6 +6,7 @@ node('docker') {
         compose.exec('web', 'jenkins', """
             whoami
             ruby --version
+            ls -lah .
             bundle install --quiet --frozen
             bundle exec rake default[db,'']
         """)
