@@ -15,6 +15,11 @@ services:
     - --innodb-checksums=0
     - --innodb-buffer-pool-size=1G
     - --innodb-support-xa=0
+    - --datadir=/tmpfs/datadir
+    - --tmpdir=/tmpfs/tmpdir
+    tmpfs:
+    - /tmpfs/datadir:size=200M
+    - /tmpfs/tmpdir:size=200M
   web:
     build: .
     command: /sbin/init
