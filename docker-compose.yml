@@ -12,7 +12,8 @@ services:
     - --sync-frm=0
     - --innodb-flush-log-at-trx-commit=0
   web:
-    build: .
+    image: ruby:2.3
+    working_dir: /code
     command: /sbin/init
     depends_on:
     - db
