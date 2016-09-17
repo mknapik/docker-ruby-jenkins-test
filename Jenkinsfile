@@ -7,6 +7,7 @@ node('docker') {
             stage 'setup users'
             compose.createJenkinsUser('web')
             stage 'bundle'
+            compose.exec('web', 'ls -lahR .')
             compose.exec('web', 'jenkins', 'bundle install --quiet --frozen --deployment')
             stage 'setup tables'
             compose.exec('web', 'jenkins', "bundle exec rake setup[db,'']")
