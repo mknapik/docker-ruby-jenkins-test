@@ -8,7 +8,7 @@ node('docker') {
             compose.exec('web', 'jenkins', 'ruby --version')
             compose.exec('web', 'jenkins', 'ls -lah')
             compose.exec('web', 'jenkins', 'bundle install --quiet --frozen')
-            compose.exec('web', 'jenkins', 'bundle exec rake default[db,'']')
+            compose.exec('web', 'jenkins', "bundle exec rake default[db,'']")
         }
     }
 }
