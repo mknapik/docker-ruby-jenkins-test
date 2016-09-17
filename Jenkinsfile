@@ -4,11 +4,14 @@ node('docker') {
 
         withDockerCompose { compose ->
             compose.createJenkinsUser('web')
+            compose.exec('web', "chown jenkins:jenkins /usr/local/bundle")
             compose.exec('web', 'jenkins', "ls -lahR /usr/local/bundle")
+
             compose.exec('web', 'jenkins', 'whoami')
             compose.exec('web', 'jenkins', 'ruby --version')
             compose.exec('web', 'jenkins', 'ls -lah')
-            compose.exec('web', 'jenkins', 'bundle install --quiet --frozen')
+            compose.exec('web', 'jenkins', 'bundle install')
+            // compose.exec('web', 'jenkins', 'bundle install --quiet --frozen')
             compose.exec('web', 'jenkins', "bundle exec rake default[db,'']")
         }
     }
