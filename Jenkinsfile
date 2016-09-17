@@ -1,15 +1,17 @@
 node('docker') {
-    checkout(scm)
+    wrap([$class: 'TimestamperBuildWrapper']) {
+        checkout(scm)
 
-    withDockerCompose { compose ->
-        compose.createJenkinsUser('web')
-        compose.exec('web', 'jenkins', """
-            whoami
-            ruby --version
-            ls -lah .
-            bundle install --quiet --frozen
-            bundle exec rake default[db,'']
-        """)
+        withDockerCompose { compose ->
+            compose.createJenkinsUser('web')
+            compose.exec('web', 'jenkins', """
+                whoami
+                ruby --version
+                ls -lah .
+                bundle install --quiet --frozen
+                bundle exec rake default[db,'']
+            """)
+        }
     }
 }
 
