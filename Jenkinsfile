@@ -80,7 +80,7 @@ def withDockerCompose(Closure cl) {
 
     withEnv(["TMPDIR=${env.TMPDIR == null ? '/tmp' : env.TMPDIR}"]) {
         try {
-            sh "ls -lahR ${env.TMPDIR/0/usr/local/bundle}"
+            sh "ls -lahR ${env.TMPDIR}/0/usr/local/bundle"
             compose.up()
 
             cl(compose)
