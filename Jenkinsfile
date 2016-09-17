@@ -6,14 +6,14 @@ node('docker') {
         withDockerCompose { compose ->
             stage 'setup users'
             compose.createJenkinsUser('web')
-            compose.exec('web', "chown jenkins:jenkins /usr/local/bundle")
 
             // compose.exec('web', 'jenkins', 'whoami')
             // compose.exec('web', 'jenkins', 'ruby --version')
             // compose.exec('web', 'jenkins', 'ls -lah')
 
             stage 'bundle'
-            compose.exec('web', 'jenkins', 'bundle install --quiet --frozen')
+            compose.exec('web', 'jenkins', 'bundle install --quiet --frozen --deployment')
+            compose.exec('web', 'jenkins', 'bundle package --all')
             stage 'setup tables'
             compose.exec('web', 'jenkins', "bundle exec rake setup[db,'']")
             stage 'test'
