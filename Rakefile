@@ -1,12 +1,23 @@
 require 'mysql2'
 require 'pp'
 
+def connect(host, password, retries: 5)
+  for trial in 0..retries
+    begin
+      return Mysql2::Client.new(host: host, username: 'root', password: password)
+    rescue Mysql2::Error
+      raise if trial == retries
+      sleep(2**trial)
+    end
+  end
+end
+
 task :default, [:host, :password] => [:setup, :test]
 task :setup, [:host, :password] do |_, args|
   host = args[:host]
   password = args[:password]
 
-  client = Mysql2::Client.new(host: host, username: 'root', password: password)
+  client = connect(host, password)
   client.query('DROP DATABASE IF EXISTS docker_ruby_jenkins_test')
   client.query('CREATE DATABASE docker_ruby_jenkins_test')
   client.select_db('docker_ruby_jenkins_test')
@@ -36,7 +47,7 @@ task :test, [:host, :password] do |_, args|
   host = args[:host]
   password = args[:password]
 
-  client = Mysql2::Client.new(host: host, username: 'root', password: password)
+  client = connect(host, password)
   client.select_db('docker_ruby_jenkins_test')
 
   50.times do |j|

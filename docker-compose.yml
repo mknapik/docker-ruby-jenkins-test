@@ -1,4 +1,8 @@
 version: '2'
+volumes:
+  gems:
+    external:
+        name: gems-${EXECUTOR_NUMBER}-ruby-2.3
 services:
   db:
     image: mysql:5.6
@@ -12,11 +16,17 @@ services:
     - --sync-frm=0
     - --innodb-flush-log-at-trx-commit=0
   web:
-    image: ruby:2.3
+    build:
+      context: .
+      args:
+        host_uid: $HOST_UID
+    image: ${JOB_NAME}:${BUILD_NUMBER}
     working_dir: /code
-    command: /sbin/init
+    environment:
+    - GEM_HOME=/gems
+    - BUNDLE_PATH=/gems
     depends_on:
     - db
     volumes:
     - .:/code
-    # - ${TMPDIR}/${EXECUTOR_NUMBER}/code/vendor:/code/vendor
+    - gems:/gems
