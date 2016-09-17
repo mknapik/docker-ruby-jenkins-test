@@ -79,7 +79,6 @@ def withDockerCompose(Closure cl) {
 
     withEnv(["TMPDIR=${env.TMPDIR == null ? '/tmp' : env.TMPDIR}"]) {
         try {
-            sh 'env'
             compose.up()
 
             cl(compose)
