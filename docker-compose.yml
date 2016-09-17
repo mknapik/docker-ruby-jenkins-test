@@ -18,4 +18,4 @@ services:
     - db
     volumes:
     - .:/code
-    - ${TMPDIR}/0/usr/local/bundle:/usr/local/bundle
+    - ${TMPDIR}/${EXECUTOR_NUMBER}/usr/local/bundle:/usr/local/bundle
