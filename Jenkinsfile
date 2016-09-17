@@ -6,11 +6,16 @@ node('docker') {
             compose.createJenkinsUser('web')
             compose.exec('web', "chown jenkins:jenkins /usr/local/bundle")
 
-            compose.exec('web', 'jenkins', 'whoami')
-            compose.exec('web', 'jenkins', 'ruby --version')
-            compose.exec('web', 'jenkins', 'ls -lah')
+            // compose.exec('web', 'jenkins', 'whoami')
+            // compose.exec('web', 'jenkins', 'ruby --version')
+            // compose.exec('web', 'jenkins', 'ls -lah')
+
+            stage 'bundle'
             compose.exec('web', 'jenkins', 'bundle install --quiet --frozen')
-            compose.exec('web', 'jenkins', "bundle exec rake default[db,'']")
+            stage 'setup tables'
+            compose.exec('web', 'jenkins', "bundle exec rake setup[db,'']")
+            stage 'test'
+            compose.exec('web', 'jenkins', "bundle exec rake test[db,'']")
         }
     }
 }

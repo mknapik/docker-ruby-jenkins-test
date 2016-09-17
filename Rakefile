@@ -1,7 +1,8 @@
 require 'mysql2'
 require 'pp'
 
-task :default, [:host, :password] do |_, args|
+task :default, [:host, :password] => [:setup, :test]
+task :setup, [:host, :password] do |_, args|
   host = args[:host]
   password = args[:password]
 
@@ -29,6 +30,14 @@ task :default, [:host, :password] do |_, args|
       SQL
     )
   end
+end
+
+task :test, [:host, :password] do |_, args|
+  host = args[:host]
+  password = args[:password]
+
+  client = Mysql2::Client.new(host: host, username: 'root', password: password)
+  client.select_db('docker_ruby_jenkins_test')
 
   50.times do |j|
     500.times do |i|
