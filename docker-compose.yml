@@ -11,10 +11,6 @@ services:
     - --innodb-file-per-table=ON
     - --sync-frm=0
     - --innodb-flush-log-at-trx-commit=0
-    - --innodb-doublewrite=0
-    - --innodb-checksums=0
-    - --innodb-buffer-pool-size=500M
-    - --innodb-support-xa=0
   web:
     build: .
     command: /sbin/init
