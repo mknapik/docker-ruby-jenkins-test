@@ -77,7 +77,7 @@ class DockerCompose implements Serializable {
 def withDockerCompose(Closure cl) {
     def compose = new DockerCompose("${env.EXECUTOR_NUMBER}", this)
 
-    withEnv(['TMPDIR=${TMPDIR:-/tmp}']) {
+    withEnv(["TMPDIR=${env.TMPDIR == null ? '/tmp' : env.TMPDIR}"]) {
         try {
             sh 'env'
             compose.up()
