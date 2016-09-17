@@ -6,6 +6,8 @@ node('docker') {
         withDockerCompose { compose ->
             stage 'setup users'
             compose.createJenkinsUser('web')
+            sh "ls -lahR ${env.TMPDIR}/${env.EXECUTOR_NUMBER}/code/vendor"
+            compose.exec('web', 'chown jenkins:jenkins /code/vendor')
 
             // compose.exec('web', 'jenkins', 'whoami')
             // compose.exec('web', 'jenkins', 'ruby --version')
