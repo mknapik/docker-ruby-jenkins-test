@@ -18,4 +18,4 @@ services:
     - db
     volumes:
     - .:/code
-    - ${TMPDIR}/${EXECUTOR_NUMBER}/code/vendor:/code/vendor
+    # - ${TMPDIR}/${EXECUTOR_NUMBER}/code/vendor:/code/vendor
