@@ -14,9 +14,8 @@ services:
   web:
     build: .
     command: /sbin/init
-    volumes:
-    - .:/code
     depends_on:
     - db
     volumes:
     - .:/code
+    - ${TMPDIR}/0/usr/local/bundle/cache:/usr/local/bundle/cache
