@@ -1,8 +1,10 @@
 node('docker') {
     wrap([$class: 'TimestamperBuildWrapper']) {
+        stage 'checkout'
         checkout(scm)
 
         withDockerCompose { compose ->
+            stage 'setup users'
             compose.createJenkinsUser('web')
             compose.exec('web', "chown jenkins:jenkins /usr/local/bundle")
 
@@ -82,6 +84,7 @@ class DockerCompose implements Serializable {
 }
 
 def withDockerCompose(Closure cl) {
+    stage 'docker-compose up'
     def compose = new DockerCompose("${env.EXECUTOR_NUMBER}", this)
 
     withEnv(["TMPDIR=${env.TMPDIR == null ? '/tmp' : env.TMPDIR}"]) {
@@ -90,6 +93,7 @@ def withDockerCompose(Closure cl) {
 
             cl(compose)
         } finally {
+            stage 'docker-compose down'
             compose.down()
         }
     }
