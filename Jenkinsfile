@@ -13,7 +13,6 @@ node('docker') {
 
             stage 'bundle'
             compose.exec('web', 'jenkins', 'bundle install --quiet --frozen --deployment')
-            compose.exec('web', 'jenkins', 'bundle package --all')
             stage 'setup tables'
             compose.exec('web', 'jenkins', "bundle exec rake setup[db,'']")
             stage 'test'
