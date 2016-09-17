@@ -13,12 +13,12 @@ services:
     - --innodb-flush-log-at-trx-commit=0
     - --innodb-doublewrite=0
     - --innodb-checksums=0
-    - --innodb-buffer-pool-size=1G
-    - --innodb-support-xa=0
+    - --innodb-buffer-pool-size=500M
+    - --innodb-support-xa=0 
     - --datadir=/tmpfs/datadir
     - --tmpdir=/tmpfs/tmpdir
     tmpfs:
-    - /tmpfs/datadir:size=200M
+    - /tmpfs/datadir:size=800M
     - /tmpfs/tmpdir:size=200M
   web:
     build: .
