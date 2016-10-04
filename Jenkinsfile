@@ -1,3 +1,5 @@
+setDockerImageName()
+
 node('docker') {
     withCleanup {
         stage name: 'prepare shared volume', concurrency: 1
@@ -23,4 +25,12 @@ node('docker') {
             }
         }
     }
+}
+
+def setDockerImageName() {
+    env.DOCKER_IMAGE_NAME = replaceForbiddenCharacters(env.JOB_NAME)
+}
+
+def replaceForbiddenCharacters(String string) {
+  string.replaceAll('%2F', '/').replaceAll(/[^a-z0-9-_.]/, '.')
 }
