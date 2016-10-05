@@ -1,4 +1,5 @@
 setDockerImageName()
+discardOldBuilds()
 
 node('docker') {
     withCleanup {
