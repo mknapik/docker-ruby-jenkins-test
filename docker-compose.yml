@@ -21,7 +21,6 @@ services:
       args:
         host_uid: $HOST_UID
     image: ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}
-    working_dir: /code
     environment:
     - GEM_HOME=/gems
     - BUNDLE_PATH=/gems
