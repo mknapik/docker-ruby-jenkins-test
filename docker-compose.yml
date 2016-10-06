@@ -20,7 +20,7 @@ services:
       context: .
       args:
         host_uid: $HOST_UID
-    image: ${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}
+    image: ${DOCKER_IMAGE_NAME}
     environment:
     - GEM_HOME=/gems
     - BUNDLE_PATH=/gems
