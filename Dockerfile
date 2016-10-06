@@ -1,6 +1,8 @@
 FROM ruby:2.3
 MAINTAINER Michał Knapik <michal.knapik@u2i.com>
 
+RUN touch .asd
+
 RUN wget --quiet --output-document=dumb-init.deb \
       https://github.com/Yelp/dumb-init/releases/download/v1.1.3/dumb-init_1.1.3_amd64.deb && \
   dpkg --install dumb-init.deb && \
