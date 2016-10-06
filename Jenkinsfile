@@ -2,6 +2,11 @@ setDockerImageName()
 discardOldBuilds()
 
 node('docker') {
+    stage 'Docker lint'
+    docker.image('redcoolbeans/dockerlint').run()
+}
+
+node('docker') {
     withCleanup {
         stage name: 'prepare shared volume', concurrency: 1
         setupDockerVolume("gems-${env.EXECUTOR_NUMBER}-ruby-2.3")
