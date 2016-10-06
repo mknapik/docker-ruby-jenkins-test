@@ -3,7 +3,9 @@ discardOldBuilds()
 
 node('docker') {
     stage 'Docker lint'
-    docker.image('redcoolbeans/dockerlint').run()
+    docker.image('redcoolbeans/dockerlint').withRun() {
+        
+    }
 }
 
 node('docker') {
