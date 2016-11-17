@@ -4,7 +4,7 @@ require 'pp'
 def connect(host, password, retries: 5)
   for trial in 0..retries
     begin
-      return Mysql2::Client.new(host: host, username: 'root', password: password)
+      return Mysql2::Client.new(host: host, username: ENV.fetch('SNAP_DB_MYSQL_USER', 'root'), password: password, port: ENV.fetch('SNAP_DB_MYSQL_PORT', 3306))
     rescue Mysql2::Error
       raise if trial == retries
       sleep(2**trial)
